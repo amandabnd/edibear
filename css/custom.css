@@ -1,0 +1,14 @@
+
+.green-input {
+  color: #646464;
+  background-color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 2px solid #95C523;
+  width: 100%;
+}
+
+.search-btn {
+  padding-left: 40px !important;
+  padding-right: 40px !important;
+}
