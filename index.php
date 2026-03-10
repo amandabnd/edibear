@@ -7,6 +7,70 @@
     $user = new USER();
     $widgets = new WIDGETS();
 ?>
+<?php
+    // Fetch categories and subcategories from the database
+    $categories = $user->fetchAll(
+        array("id", "name"),  
+        array("product_categories"),
+        array("status" => 1)  
+    );
+
+    $subcategories = $user->fetchAll(
+        array("id", "title"), 
+        array("sub_category"),  
+        array() 
+    );
+
+    // Get filter values
+    $languageFilter = isset($_GET['language']) ? $_GET['language'] : '';
+    $gradeFilter = isset($_GET['grade']) ? $_GET['grade'] : '';
+    $categoryFilter = isset($_GET['category']) ? $_GET['category'] : '';
+    $subCategoryFilter = isset($_GET['sub_category']) ? $_GET['sub_category'] : '';
+
+    // Construct the WHERE clause dynamically based on filters
+    $whereConditions = ["status = 1"];
+    $params = [];
+
+   
+   // Only add filters if they are not empty and not the default "Required" placeholder text
+    if (!empty($languageFilter) && $languageFilter !== 'Language (Required)') {
+        $whereConditions[] = "language = :language";
+        $params[':language'] = $languageFilter;
+    }
+
+    if (!empty($gradeFilter) && $gradeFilter !== 'Grade (Required)') {
+        $whereConditions[] = "age_group = :age_group";
+        $params[':age_group'] = $gradeFilter;
+    }
+
+    if (!empty($categoryFilter) && $categoryFilter !== 'Category (Required)') {
+        $whereConditions[] = "category_id = :category_id";
+        $params[':category_id'] = $categoryFilter;
+    }
+
+    if (!empty($subCategoryFilter)) {
+        $whereConditions[] = "sub_category_id = :sub_category_id";
+        $params[':sub_category_id'] = $subCategoryFilter;
+    }
+
+    $whereClause = "WHERE " . implode(" AND ", $whereConditions);
+    
+
+    // Check if any search filter was actually applied
+    $isSearching = (count($params) > 0);
+
+    if ($isSearching) {
+        // Show all results that match the search
+        $productQuery = "SELECT * FROM products $whereClause ORDER BY id DESC";
+    } else {
+        // DEFAULT STATE: Show most recent 4 products
+        $productQuery = "SELECT * FROM products WHERE status = 1 ORDER BY id DESC LIMIT 4";
+    }
+
+    $stmt = $user->getConnection()->prepare($productQuery);
+    $stmt->execute($params);
+    $products = $stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,10 +79,20 @@
 
     <?php echo $userHeader->printUserHeader() ?>
     <style>
-        .testimonial-bg{
-            background: url("./img/Web pic/testimonial.jpg")  no-repeat left center;
-            background-size: 100% 70%;
-        }
+        .testimonial-bg {
+        /* Using the path you provided */
+        background: url("./img/Web pic/Trails of tales.webp") no-repeat center;
+         background-size: 100% 60%;
+         padding: 0px 0;
+    }
+
+    .testimonial-sec .product-card, 
+    .testimonial-sec .testimonial-item { 
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
         @media (max-width:768px) {
             .testimonial-bg{
                 background: none;
@@ -44,8 +118,8 @@
 
 
     <?php 
-        echo $userHeader->printUserTopBar();        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
+        // echo $userHeader->printUserTopBar();        //Topbar
+        echo $userHeader->printUserNav();       //Navbar
         //Carousel
         
         if ( !$user->CountRows("carousel", array("type"=>"video", "status"=>1)) ) {
@@ -57,29 +131,45 @@
     
     <!-- Carousel End -->
 
-    <div class="container-fluid py-4 mt-5" id="ayubowan">
-        <div class="container littlebuddiescontainer py-5">
-            <div class="row littlebuddiesrow justify-content-center">
-                <div class="col-lg-5 littlebuddiestextcolumn col-md-6">
-                    <h1 class="text-primary homemaintext">Hello,</h1>
-                    <h5 class="text-warning littlebud">LITTLE BUDDIES</h5>
-                    <h1 class="text-primary homemaintext2">Learning today for a better tomorrow. </h1>
-                    <p class="text-justify mt-4 homeptext">
-                    Hey, I'm edi. Welcome to my awesome world. 
-                    Yes, I know, as a kid, you love to play and have lots of fun. 
-                    But you must remember that learning and studying are very important for you to face challenges. 
-                    So, I am here to support you. Let's engage in some cool activities that will help you to become more creative, 
-                    wise, and the best, in the learning process. So come on, let's explore and have a blast.
-                    <br> 
-                   
-                    </p>
-                </div>
-                <div class="col-lg-6 bearbox col-md-6 col-sm-6 d-flex align-items-center">
-                    <img src="./img/Web pic/homebg.png" width="100%" alt="">
-                </div>
+    <div class="container-fluid edi-intro-section" id="ayubowan">
+    <div class="container">
+        <div class="row align-items-center">
+
+            <div class="col-lg-5 col-md-6 edi-intro-text">
+
+                <h4 class="edi-hello">Hello,</h4>
+
+                <h1 class="edi-little">LITTLE BUDDY!</h1>
+
+                <h3 class="edi-welcome">Welcome to <br> my awesome world!</h3>
+
+                <p class="edi-paragraph">
+                I’m Edi, your little bear friend. I’m so happy to see you here. 
+                <b>It’s time to begin your adventure and find new treasures.</b> 
+                We are going to have so much fun together! Are you ready?
+                </p>
+
+                <p class="edi-paragraph">
+                I know you love to play, and guess what? Learning is just as exciting! 
+                It helps you grow strong and wise so you can tackle any challenge 
+                that comes your way.
+                </p>
+
+                <p class="edi-paragraph">
+                On this journey, you can explore magical resources, discover exciting activities 
+                in the den, and finally face the “Brave Heart” challenge. 
+                Let’s go explore together!
+                </p>
+
             </div>
+
+            <div class="col-lg-7 col-md-6 text-center edi-intro-image">
+                <img src="./img/Web pic/homebg.png" class="img-fluid">
+            </div>
+
         </div>
     </div>
+</div>
 
     <?php
         /*if ( $user->CountRows("carousel", array("type"=>"main", "status"=>1)) ) {
@@ -92,27 +182,86 @@
     <div class="container-fluid py-4">
         <div class="container py-5">
             <div class="text-center">
-                <h1 class="text-primary">CHOOSE WHAT YOU WANT</h1>
+                <h1 class="text-primary">EXPLORER TRAINING CAMP</h1>
             </div>
 
             <div class='row mt-3 justify-content-center'>
                 <div class="col-lg-10 col-md-12 row">
                 <p class="text-justify">
-                In here, you can find awesome coloring pages, fun activity books, model papers, and all the information & study materials you need for your school assignments. Just click on the icon that has what you are looking for, and you are good to go!</p>
+                Congratulations, Explorer! You’ve reached your first destination. 
+        Search every corner to find new resources to polish your skills and boost your brainpower.
+        Simply <b>select your Language, Grade, and Category</b> to find exactly what you need. 
+        Let’s get started!</p>
                 </div>
             </div>
 
             <div class='row mt-5 justify-content-center'>
                 <div class="col-lg-10 col-md-12 row">
                     <?php
-                        echo $widgets->displayHowItWorksBlock("COLORING PAGES", "Find a variety of beautiful<br>coloring pages", "1.png");
-                        echo $widgets->displayHowItWorksBlock2("BOOKS & PAPERS", "Find kids' workbooks &<br>relevant model papers", "2.png");
-                        echo $widgets->displayHowItWorksBlock3("STUDY PACKS", "Find kids' school<br>homework-related items", "3.png");
+                    echo $widgets->displayHowItWorksBlock3("FUN ACTIVITIES", "Find kids' school<br>homework-related items", "1.png");
+                        echo $widgets->displayHowItWorksBlock("WORKSHEETS", "Find a variety of beautiful<br>coloring pages", "3.png");
+                        echo $widgets->displayHowItWorksBlock2("BRAIN BOOSTERS", "Find kids' workbooks &<br>relevant model papers", "2.png");
+                        
                     ?>
                 </div>
             </div>
         </div>
     </div>
+     <!-- SEARCH AREA -->
+
+    <div class="explorer-search-area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-3 mb-2">
+                <form method="GET" action="#honey-market-section">
+                    <select class="explorer-select" name="language">
+                        <option>Language (Required)</option>
+                        <option value="English" <?php echo ($languageFilter == 'English' ? 'selected' : ''); ?>>English</option>
+                        <option value="Sinhala" <?php echo ($languageFilter == 'Sinhala' ? 'selected' : ''); ?>>Sinhala</option>
+                        <option value="Tamil" <?php echo ($languageFilter == 'Tamil' ? 'selected' : ''); ?>>Tamil</option>
+                    </select>
+            </div>
+
+            <div class="col-md-3 mb-2">
+                <select class="explorer-select" name="grade">
+                    <option>Grade (Required)</option>
+                    <option value="Pre School" <?php echo ($gradeFilter == 'Pre School' ? 'selected' : ''); ?>>Pre School</option>
+                    <option value="Grade 1" <?php echo ($gradeFilter == 'Grade 1' ? 'selected' : ''); ?>>Grade 1</option>
+                    <option value="Grade 2" <?php echo ($gradeFilter == 'Grade 2' ? 'selected' : ''); ?>>Grade 2</option>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-2">
+                <select class="explorer-select" name="category">
+                    <option>Category (Required)</option>
+                    <?php foreach ($categories as $category): ?>
+                        <option value="<?php echo $category['id']; ?>" <?php echo ($categoryFilter == $category['id'] ? 'selected' : ''); ?>>
+                            <?php echo $category['name']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="col-md-3 mb-2">
+                    <select class="explorer-select" name="sub_category">
+                     <option value="">Sub Category (Optional)</option>
+                    <?php foreach ($subcategories as $sub): ?>
+                      <option value="<?php echo $sub['id']; ?>" <?php echo ($subCategoryFilter == $sub['id'] ? 'selected' : ''); ?>>
+                     <?php echo $sub['title']; ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="explore-btn">EXPLORE</button>
+        </div>
+    </div>
+</div>
+
+</div>
     <!--Search Section-->
      <!--------
     <div class="container-fluid py-4">
@@ -173,6 +322,63 @@
         
      </div>
     ---------->
+
+    <div class="container-fluid py-5" id="honey-market-section">
+      <div class="container">
+
+       <div class="text-center">
+        <h1 class="text-danger">THE HONEY MARKET</h1>
+      <p>
+This is your second destination! Explore every trail and collect new treasures
+to sharpen your knowledge and brighten your brave hearts!
+        </p>
+       </div>
+
+<div class="row mt-4">
+
+<?php 
+            // REMOVE the $products = $user->fetchAll(...) line that was here.
+            // We now use the $products array we fetched at the top.
+            
+            if (empty($products)) {
+                echo "<div class='col-12 text-center'><p>No treasures found in this trail. Try another search!</p></div>";
+            } else {
+                foreach($products as $product) {
+                    $price = $product['discounted_price'] > 0 ? $product['discounted_price'] : $product['price'];
+            ?>
+                <div class="col-lg-3 col-md-6 text-center mb-4">
+                    <div class="product-card">
+                        <img src="./img/products/<?php echo $product['image']; ?>" class="product-img cart-product-image">
+                        <h6 class="mt-3"><?php echo $product['product_name']; ?></h6>
+                        <div class="price">
+                            <?php
+                            if($product['discounted_price'] > 0){
+                                echo "<span class='old-price'>LKR ".$product['price']."</span>";
+                                echo "<span class='new-price'>LKR ".$product['discounted_price']."</span>";
+                            } else {
+                                echo "<span class='new-price'>LKR ".$product['price']."</span>";
+                            }
+                            ?>
+                        </div>
+                        <form method="POST" action="add_to_cart.php">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <button type="submit" class="btn btn-success collect-btn add-to-cart-btn">Collect</button>
+                        </form>
+
+                    </div>
+                </div>
+
+<?php } 
+}?>
+
+</div>
+
+<div class="text-center mt-4">
+<a href="./product_page.php" class="btn btn-success px-5">MORE</a>
+</div>
+
+</div>
+</div>
 
     <?php
     $ad1Rows = $user->fetchAll(
@@ -239,53 +445,34 @@
 
     ---->
 
-    <!-- Testimonials -->
-    <div class="container-fluid pt-4">
-        <div class="container pt-5 pb-4">
-            <div class="text-center">
-                <h1 class="text-primary">WHAT PEOPLE THINK ABOUT US</h1>
-                
-            </div>
-
-            <div class='row mt-3 justify-content-center'>
-                <div class="col-lg-10 col-md-12 row">
+    <div class="container-fluid pt-4 px-0"> <div class="container pt-5 pb-4">
+        <div class="text-center">
+            <h1 class="text-primary">TRAIL OF TALES</h1>
+        </div>
+        <div class='row mt-3 justify-content-center'>
+            <div class="col-lg-10 col-md-12">
                 <p class="text-justify">
-                All of us spend a busy life in today’s world. So, meeting all of your child's educational and recreational needs could be a challenge for you. But don't worry, I am here to help. I love to hear your thoughts on this, so please share your comments below. </p>
-                </div>
-            </div>
-
-
-<!-- 
-            <div class="row justify-content-center">
-                <p class="text-center col-lg-10 mt-3 px-lg-5">
-                
+                    It's time to see what our early buddies and parents think about Edi's adventure! In a busy life, it can be hard to meet all your child's learning and entertainment needs, but I am here to help you every step of the way. Nothing makes me happier than seeing my Little Buddies succeed!
                 </p>
-            </div> -->
-            <div class="row justify-content-center mt-4 testimonial-sec">
+            </div>
+        </div>
+    </div>
 
+    <div class="testimonial-bg">
+        <div class="container"> <div class="row justify-content-center testimonial-sec">
                 <?php
                     foreach ( $user->fetchAll(array("user_id","ratings","one_word","review"), array("testimonials"), array("status"=>1), "id DESC LIMIT 3") as $testimonialArr ) {
                         echo $widgets->displayTestimonialBrief(array_merge($testimonialArr, $user->fetchAll(array("name","profile_pic","country"), array("tourists"), array("id"=>$testimonialArr['user_id']))[0]));
                     }
                 ?>
-<!-----
-            <div>
-                <div class="indextestimonials">
-
-                
-
-                </div>
-            </div>
-            ---->
-
-               
-
-            </div>
-            <div class="text-center pt-4 pb-5">
-                <button class="btn btn-primary px-4 rounded" onclick="location.href='./testimonials'">SEE MORE</button>
             </div>
         </div>
     </div>
+
+    <div class="text-center pt-4 pb-5">
+        <button class="btn btn-primary px-4 rounded" onclick="location.href='./testimonials'">SEE MORE</button>
+    </div>
+</div>
 
     <!-- <div class="testimonial-bg">
         <div class="row justify-content-center py-4 px-1 px-md-3 px-lg-5" style="margin: 0;">
@@ -305,13 +492,13 @@
     <div class="container-fluid py-4">
         <div class="container py-5">
             <div class="text-center">
-                <h1 class="text-primary">FUN ACTIVITIES</h1>
+                <h1 class="text-primary">THE HIDDEN DEN</h1>
             </div>
 
             <div class='row mt-3 justify-content-center'>
                 <div class="col-lg-10 col-md-12 row">
                 <p class="text-justify">
-                We offer a variety of activities that promote your child's education while ensuring they have fun and enjoyable learning experience. Through these activities, children will develop a greater enthusiasm for learning. Furthermore, these activities help to address any type of challenges that may come up to the child. This is our primary goal.</p>
+                Hurrah! You've reached the third destination. This is very special. Inside the Hidden Den, you can discover exciting things that make learning feel just like play! Step inside and explore what you want to learn while Edi guides you step-by-step. Now, you're ready to face any challenge with total confidence!</p>
                 </div>
             </div>
 
@@ -326,13 +513,13 @@
                 <div class="col-md-6">
                     <div class="row justify-content-center">
                         <?php
+                            $row = null;
+                            $lastBlogID = "";
                             foreach ( $user->fetchAll(array("id","tag","title","image", "description","timestamp"), array("blog_details"), array("status"=>"1"), "id DESC LIMIT 1") as $row ) {
                                 echo $widgets->displayBlogBrief($row, "col-12", 600, true);
                             }
-                            if ( $row['id'] ) {
+                            if ( isset($row['id']) && $row['id'] ) {
                                 $lastBlogID = "id<".$row['id'];
-                            } else {
-                                $lastBlogID = "";
                             }
                         ?>
                     </div>
@@ -404,13 +591,13 @@
         <h1 class="text-center d-none"> ADD SPACE </h1>
         <div class="row">
                 <?php
+                    $row = null;
+                    $lastad2ID = "";
                     foreach ( $user->fetchAll(array("id","tag","title","image", "description","timestamp", "adlink"), array("ad2_details"), array("status"=>"1"), "id DESC LIMIT 1") as $row ) {
                         echo $widgets->displayad2Brief($row, 600, true);
                     }
-                    if ( $row['id'] ) {
+                    if ( isset($row['id']) && $row['id'] ) {
                         $lastad2ID = "id<".$row['id'];
-                    } else {
-                        $lastad2ID = "";
                     }
                 ?>
         </div>    
@@ -426,6 +613,57 @@
                 scrollTop: $("#ayubowan").offset().top
             });
         }
+    </script>
+    <script>
+        document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+            button.addEventListener("click", function(e) {
+                e.preventDefault();
+
+                const form = this.closest("form");
+                const productCard = this.closest(".product-card");
+                const productImage = productCard.querySelector(".cart-product-image");
+                const cartIcon = document.querySelector("#cart-icon");
+
+                const imgClone = productImage.cloneNode(true);
+
+                const rect = productImage.getBoundingClientRect();
+                const cartRect = cartIcon.getBoundingClientRect();
+
+                imgClone.style.position = "fixed";
+                imgClone.style.left = rect.left + "px";
+                imgClone.style.top = rect.top + "px";
+                imgClone.style.width = rect.width + "px";
+                imgClone.style.zIndex = 9999;
+                imgClone.style.transition = "all 0.8s ease-in-out";
+
+                document.body.appendChild(imgClone);
+
+                setTimeout(() => {
+                    imgClone.style.left = cartRect.left + "px";
+                    imgClone.style.top = cartRect.top + "px";
+                    imgClone.style.width = "20px";
+                    imgClone.style.opacity = "0.3";
+                }, 10);
+
+                setTimeout(() => {
+                    imgClone.remove();
+
+                    /* SEND CART REQUEST WITHOUT PAGE RELOAD */
+                    if (form) {
+                        fetch("add_to_cart.php", {
+                            method: "POST",
+                            body: new FormData(form)
+                        });
+                    }
+
+                    /* CART BOUNCE EFFECT */
+                    if (cartIcon) {
+                        cartIcon.classList.add("bounce");
+                        setTimeout(() => cartIcon.classList.remove("bounce"), 400);
+                    }
+                }, 800);
+            });
+        });
     </script>
 </body>
 

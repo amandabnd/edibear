@@ -7,6 +7,14 @@
   $user = new USER();
   $widgets = new WIDGETS();
   $editMode = false;
+  $currentpdfTag = "";
+$currentpdfTitle = "";
+$currentpdfMainDescription = "";
+$currentpdfVideoUrl = "";
+$currentpdfVideoStatus = "";
+$currentpdfMainImage = "";
+$currentpdfpdfupload = "";
+$currentpdfID = 0;
 
   if ( $user->is_loggedin() ) {
     if ( $user->checkTimeout() ) {

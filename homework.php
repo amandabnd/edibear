@@ -98,13 +98,12 @@
 
 <body>
     <?php
-        echo $userHeader->printUserTopBar();        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
-         echo $widgets->userHeaderImage();       //Header Image
+        // Match navigation with index.php
+        echo $userHeader->printUserNav();       // Navbar
     ?>
 
     <!-- homework Start -->
-    <div class="container-fluid py-3">
+    <div class="container-fluid py-3" style="margin-top: 110px !important;">
         <div class="container pt-3">
 
         <div class="d-flex pageheaderdiv">

@@ -7,6 +7,14 @@
   $user = new USER();
   $widgets = new WIDGETS();
   $editMode = false;
+  $currenthomeworkTag = "";
+$currenthomeworkTitle = "";
+$currenthomeworkMainDescription = "";
+$currenthomeworkVideoUrl = "";
+$currenthomeworkVideoStatus = "";
+$currenthomeworkMainImage = "";
+$currenthomeworkpdfupload = "";
+$currenthomeworkID = 0;
 
   if ( $user->is_loggedin() ) {
     if ( $user->checkTimeout() ) {

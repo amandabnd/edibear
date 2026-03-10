@@ -54,16 +54,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['form_submitted']) && 
     
           $umail = strip_tags(isset($_POST['inputEmail']) ? $_POST['inputEmail'] : "");
           $upass = strip_tags(isset($_POST['inputPassword']) ? $_POST['inputPassword'] : "");
-          if($login->doLogin($umail,$upass)){
-              if (isset($_GET['page'])) {
-                $redirect = $_GET['page'];
-              } else {
-                $redirect = "dashboard";
+          
+          // Verify reCAPTCHA token
+          $recaptcha_token = isset($_POST['g-recaptcha-response']) ? $_POST['g-recaptcha-response'] : '';
+          $secret_key = '6LccC4wqAAAAAEpDGD7q1dVvHZzJ8rxdmVYFLz7B'; // Replace with your actual secret key
+          $verify_url = 'https://www.google.com/recaptcha/api/siteverify';
+          
+          $response = file_get_contents($verify_url, false, stream_context_create([
+              'http' => [
+                  'method' => 'POST',
+                  'header' => 'Content-type: application/x-www-form-urlencoded',
+                  'content' => http_build_query(['secret' => $secret_key, 'response' => $recaptcha_token])
+              ]
+          ]));
+          
+          $result = json_decode($response);
+          
+          
+              if($login->doLogin($umail,$upass)){
+                  if (isset($_GET['page'])) {
+                    $redirect = $_GET['page'];
+                  } else {
+                    $redirect = "dashboard";
+                  }
+                  $login->redirect($redirect);
+              }else{
+                $incorrectUsernamePassword = true;
               }
-              $login->redirect($redirect);
-          }else{
-            $incorrectUsernamePassword = true;
-          }   
+          
 }
 ?>
 <!DOCTYPE html>
@@ -103,7 +121,7 @@ our beautiful country. So reserve your tour with us.'>
   <!--hCaptcha
   <script src='https://www.hCaptcha.com/1/api.js' async defer></script> -->
    <!--reCaptcha-->
-  <script src="https://www.google.com/recaptcha/api.js"></script>
+  
   <script src="./assets/js/plugins/jquery.min.js"></script>
 </head>
 
@@ -139,9 +157,8 @@ our beautiful country. So reserve your tour with us.'>
                       <input type="hidden" name="form_submitted" value="true">
                      <button  id="loginSubmit" name="loginSubmit"
                         class="g-recaptcha btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" 
-                        data-sitekey="6LccC4wqAAAAADClWbRtkE-S_IHOOlAc0fn5POWx" 
-                        data-callback='onSubmit' 
-                        data-action='submit'>Submit</button>
+                        type="submit"
+                        >Submit</button>
                     </div>
                   </form>
                 </div>
@@ -177,9 +194,7 @@ our beautiful country. So reserve your tour with us.'>
   <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
    <script>
-   function onSubmit(token) {
-     document.getElementById("loginForm").submit();
-   }
+   
  </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
@@ -192,15 +207,7 @@ our beautiful country. So reserve your tour with us.'>
     if (window.history.replaceState) {
         window.history.replaceState(null, null, window.location.href);
     }
-    var buttonName = ':input[name="loginSubmit"]';
-    $(buttonName).prop('disabled', true);
-    $(buttonName).css('backgroundColor','grey');
-    function correctCaptcha() {
-        $("form").each(function() {
-            $(this).find(buttonName).prop('disabled', false);
-            $(buttonName).css('backgroundColor','#5E72E4');
-        });
-    }
+    
   </script>
   <!-- Github buttons -->
   <script async defer src="./assets/js/plugins/buttons.js"></script>
@@ -219,6 +226,21 @@ our beautiful country. So reserve your tour with us.'>
         </div>
     </div>
     <!--Modal End-->
+
+    <script>
+document.getElementById("loginForm").addEventListener("submit", function(e) {
+
+    console.log("FORM SUBMITTED");
+
+    const email = document.querySelector("input[name='inputEmail']").value;
+    const password = document.querySelector("input[name='inputPassword']").value;
+
+    console.log("Email entered:", email);
+    console.log("Password length:", password.length);
+
+});
+</script>
+
 </body>
 
 </html>

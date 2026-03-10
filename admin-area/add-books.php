@@ -7,6 +7,14 @@
   $user = new USER();
   $widgets = new WIDGETS();
   $editMode = false;
+  $currentbooksTag = "";
+$currentbooksTitle = "";
+$currentbooksMainDescription = "";
+$currentbooksVideoUrl = "";
+$currentbooksVideoStatus = "";
+$currentbooksMainImage = "";
+$currentbookspdfupload = "";
+$currentbooksID = 0;
 
   if ( $user->is_loggedin() ) {
     if ( $user->checkTimeout() ) {

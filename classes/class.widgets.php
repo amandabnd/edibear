@@ -19,23 +19,38 @@ class WIDGETS{
     }
 
     public function displayHomeMainVideo($homeMainVideoURL) {
-        $html = "
+    // 1. Extract the Video ID using Regex to ensure a clean ID
+    // This handles: youtube.com/watch?v=ID, youtu.be/ID, and youtube.com/embed/ID
+    $videoId = '';
+    if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $homeMainVideoURL, $match)) {
+        $videoId = $match[1];
+    }
+
+    // 2. Only build the iframe if we found a valid ID
+    if (!empty($videoId)) {
+        $embedURL = "https://www.youtube.com/embed/" . $videoId;
+        
+        return "
             <div class='container-fluid py-5 blog-video'>
                 <div class='container pt-1'>
-                    <div class='row'>
-                        <div class='col-lg-1'></div>
-
+                    <div class='row justify-content-center'>
+                        <div class='col-lg-10'>
                             <div class='embed-responsive embed-responsive-16by9 text-center'>
-                                <iframe class='embed-responsive-item' src='$homeMainVideoURL' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>
+                                <iframe class='embed-responsive-item' 
+                                        src='$embedURL' 
+                                        allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' 
+                                        allowfullscreen>
+                                </iframe>
                             </div>
-                       
-                        <div class='col-lg-1'></div>
+                        </div>
                     </div>
                 </div>
             </div>
         ";
-        return $html;
     }
+    return "";
+}
+    
 
     public function createCachelessImage($imageURL) {
         return $imageURL . "?" . filemtime("$imageURL");
@@ -48,8 +63,8 @@ class WIDGETS{
                 <div class='cursor-pointer pt-5 pb-3 border blog-item' onclick=location.href='./pdf'>
                     <img class='img-fluid' src='$img' alt='$topic' style='height: 180px;'><br>
                     <h5 class='font-weight-bold coloring-pages text-uppercase pt-4 mb-2'>$topic</h5>
-                    <span>Find a variety of <br>
-                    beautiful coloring pages</span>
+                    <span>Discover a variety of <br>
+                    worksheets for learning.</span>
                     <div class='pt-md-3 pt-sm-1'>
                     <a href='./pdf' class='btn btn-primary px-4 mt-3 rounded'>Click Here</a>
                     </div>
@@ -66,7 +81,7 @@ class WIDGETS{
                 <div class='cursor-pointer pt-5 pb-3 border blog-item' onclick=location.href='./books'>
                     <img class='img-fluid' src='$img' alt='$topic' style='height: 180px;'><br>
                     <h5 class='font-weight-bold books-paper text-uppercase pt-4 mb-2'>$topic</h5>
-                    <span>Find kids' activity <br>books and model papers</span>
+                    <span>Secrets to grow your <br>memory and thinking skills.</span>
                     <div class='pt-md-3 pt-sm-1'>
                     <a href='./books' class='btn btn-primary px-4 mt-3 rounded'>Click Here</a>
                     </div>
@@ -83,7 +98,7 @@ class WIDGETS{
                 <div class='cursor-pointer pt-5 pb-3 border blog-item' onclick=location.href='./homework'>
                     <img class='img-fluid' src='$img' alt='$topic' style='height: 180px;'><br>
                     <h5 class='font-weight-bold homeworks text-uppercase pt-4 mb-2'>$topic</h5>
-                    <span>Find kids' school <br>related study materials</span>
+                    <span>Explore fun activities <br>for your leisure time.</span>
                     <div class='pt-md-3 pt-sm-1'>
                     <a href='./homework' class='btn btn-primary px-4 mt-3 rounded'>Click Here</a>
                     </div>

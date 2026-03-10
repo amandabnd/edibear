@@ -24,7 +24,7 @@
   --secondary: #f4faec;
   --success: #28a745;
   --info: #17a2b8;
-  --warning: #FBA303;
+  --warning: #4a3611;
   --danger: #dc3545;
   --light: #FFFFFF;
   --dark: #212121;
@@ -77,7 +77,7 @@ body {
   margin-top: -172px;
 }
 .signInText{
-  color: #95C523;
+  color: #0b530e;
 }
 .signInText:hover{
   color: rgb(51, 52, 52);
@@ -102,7 +102,7 @@ body {
 .logocontainer{
  position: relative;
  z-index: 2;
- padding-top: 20px;
+ padding-top: 5px;
 }
 
 .logorow{
@@ -140,7 +140,7 @@ body {
 }
 
 .imageframe{
-  border: #95C523 !important;
+  border: #0e5017 !important;
   border-style: solid !important;
   border-width: 2px !important;
 }
@@ -924,7 +924,7 @@ sup {
 }
 
 a {
-  color: #95C523 ;
+  color: #1d5a0e ;
   text-decoration: none;
   background-color: transparent;
 }
@@ -3146,7 +3146,7 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #95C523 !important;
+  background-color: #164c09 !important;
   border-color: #95C523 !important;
 }
 
@@ -3220,7 +3220,7 @@ fieldset:disabled a.btn {
 
 .btn-success {
   color: #fff;
-  background-color: #28a745;
+  background-color: #106825;
   border-color: #28a745;
 }
 
@@ -3442,7 +3442,7 @@ fieldset:disabled a.btn {
 
 .btn-outline-primary {
   color: #95C523;
-  border-color: #95C523;
+  border-color: #164c09;
 }
 
 .btn-outline-primary:hover {
@@ -10127,7 +10127,7 @@ a.text-info:hover, a.text-info:focus {
 
 .newsl-subscribe-btn{
  color: #fff;
- background-color: #95C523;
+ background-color: #164c09;
  border-color: #95C523;
 }
 
@@ -10712,7 +10712,7 @@ h6,
   padding: 4px;
   margin-top: 8px;
   font-size: 17px;
-  border: 1px solid #95C523;
+  border: 1px solid #164c09;
 }
 
 .search-container button {
@@ -10720,7 +10720,7 @@ h6,
   padding: 6px 15px;
   margin-top: 8px;
   /* margin-left: 16px; */
-  background: #95C523;
+  background: #164c09;
   font-size: 16px;
   border: none;
   cursor: pointer;

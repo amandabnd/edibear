@@ -10,7 +10,7 @@
         $blogID = (int)$_GET['id'];
         if ( $user->IsExist("blog_details", "id", $blogID) ) {
             $blogDetailsArr = $user->fetchAll(
-                array("tag", "title", "description", "image", "video", "video_status", "timestamp"), 
+                array("tag", "title", "description", "image", "video", "timestamp"), 
                 array("blog_details"), 
                 array("id"=>$blogID)
             )[0];
@@ -18,8 +18,7 @@
             $blogTitle = $blogDetailsArr['title'];
             $blogMainDescription = $blogDetailsArr['description'];
             $blogVideoUrl = $blogDetailsArr['video'];
-            $blogVideoStatus = $blogDetailsArr['video_status'];
-            $blogMap = $blogDetailsArr['map'];
+           
             $blogDate = date("d M Y", strtotime(substr($blogDetailsArr['timestamp'], 0, 10)));
             $blogMainImage = $widgets->createCachelessImage("./img/blogs/".$blogDetailsArr['image']);
             $fbShare = "https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fedibear.com%2Fblog%3Fid%3D".$blogID."&amp;src=sdkpreparse";
@@ -41,18 +40,17 @@
 <body>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0" nonce="ndpmmHDo"></script>
     <?php
-        echo $userHeader->printUserTopBar();        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
-        echo $widgets->userHeaderImage();       //Header Image
+        echo $userHeader->printUserNav();        //Topbar
+              //Header Image
     ?>
 
-    <div class="container-fluid py-3 p">
+    <div class="container-fluid py-3 p" style="margin-top: 70px !important;">
         <div class="container pt-3">
             <i class="fa fa-home pt-1 pr-2 text-primary"></i><a href="./">Home</a><i class="fa fa-angle-right pt-1 px-2 text-primary"></i><a href="./blogs">Blog</a><i class="fa fa-angle-right pt-1 px-2 text-primary"></i><?php echo $blogTag; ?><i class="fa fa-angle-right pt-1 px-2 text-primary"></i><?php echo $blogTitle; ?>
             <h4 class="text-warning mt-2"><?php echo $blogTitle; ?></h4>
             <div class="row mt-4">
                 <div class="col-12 text-center">
-                    <img src=<?php echo $blogMainImage ?> class="img-fluid" alt="Blog Main Image" style="width:100%;">
+                    <img src=<?php echo $blogMainImage ?> class="img-fluid" alt="Blog Main Image" style="width:60%;">
                 </div>
             </div>
             <div class="row">
@@ -112,7 +110,7 @@
                         }
                     ?>
                     <?php
-                        if ( $blogVideoStatus == '1' ) {
+                        if ( true) {
                             echo $widgets->displayHomeMainVideo($blogVideoUrl);
                         }
 

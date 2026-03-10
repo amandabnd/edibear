@@ -57,6 +57,16 @@ class HEADER {
             "redirect"=>"./homework",
             "icon"=>"fa fa-file-text-o text-danger"
         ),
+        "add-product"=>array(
+            "name"=>"Add Product",
+            "redirect"=>"./add-products",
+            "icon"=>"fa fa-pencil-square-o text-warning"
+        ),
+        "products"=>array(
+            "name"=>"Products",
+            "redirect"=>"./products",
+            "icon"=>"fa fa-file-text-o text-danger"
+        ),
 
         "add-blog"=>array(
             "name"=>"Add Blog",
@@ -111,36 +121,38 @@ class HEADER {
         )
     );
     private $userNavTabArr = array(
-        "home" => array(
-            "name"=>"Home",
-            "redirect"=>"./"
-        ),
-        "blogs" => array(
-            "name"=>"Blogs",
-            "redirect"=>"./blogs"
-        ),
-        
-        "pdf" => array(
-            "name"=>"pdfs",
-            "redirect"=>"./pdf"
-        ),
-        "homework" => array(
-            "name"=>"Homework",
-            "redirect"=>"./homework"
-        ),
-        "books" => array(
-            "name"=>"Books",
-            "redirect"=>"./books"
-        ),
-        "testimonials" => array(
-            "name"=>"Testimonials",
-            "redirect"=>"./testimonials"
-        ),
-        "about" => array(
-            "name"=>"About",
-            "redirect"=>"./about"
-        ),
-    );
+
+    "home" => array(
+        "name"=>"HOME",
+        "redirect"=>"./"
+    ),
+
+    "learn" => array(
+        "name"=>"LEARN",
+        "redirect"=>"./pdf"
+    ),
+
+    "shop" => array(
+        "name"=>"SHOP",
+        "redirect"=>"./product_page"
+    ),
+
+    "play" => array(
+        "name"=>"PLAY",
+        "redirect"=>"./blogs"
+    ),
+
+    "challenge" => array(
+        "name"=>"CHALLENGE",
+        "redirect"=>"./blogs"
+    ),
+
+    "study_packs" => array(
+        "name"=>"Study Packs",
+        "redirect"=>"./homework"
+    )
+
+);
 
     public function __construct($activePage='') {
         $this->activePage = $activePage;
@@ -155,7 +167,12 @@ class HEADER {
     }
 
     public function printUserHeader($pageName="", $ogDesc="“edibear” is a website that provides a variety of kids' coloring pages, activity books, relevant model papers, school related study materials and fun activities for developing the abilities of kids. ", $ogImg="img/Web pic/Cover.jpg") {
-        $pageName = ($pageName!="") ? $pageName : $this->userNavTabArr[$this->activePage]['name'];
+        // Check if the key exists before trying to access it
+    if ($pageName == "" && isset($this->userNavTabArr[$this->activePage])) {
+        $pageName = $this->userNavTabArr[$this->activePage]['name'];
+    } elseif ($pageName == "") {
+        $pageName = "Edibear"; // Default fallback name
+    }
         $mainCSS = "css/style.css";
         $mainCSS = $mainCSS . "?" . filemtime("$mainCSS");
         $html = "
@@ -200,6 +217,7 @@ class HEADER {
                         <span class='nav-col-tab cursor-pointer' onclick=location.href='./shop'>Shop</span>
                         <span class='nav-col-tab cursor-pointer' onclick=location.href='./about'>About</span>
                         --------->
+                        
 
 
                         </div>
@@ -224,31 +242,61 @@ class HEADER {
     }
 
     public function printUserNav() {
-        $html = "
-            <div class='container-fluid position-relative nav-bar p-0'>
-                <div class='container-lg position-relative p-0 px-lg-3' style='z-index: 9;'>
-                    <nav class='navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5'>
-                        <a href='./' class='navbar-brand'>
-                            <img class='headerLogo cursor-pointer image-responsive' src='./img/Logo.png' alt='logo'>
-                        </a>
-                        <button type='button' class='navbar-toggler' data-toggle='collapse' data-target='#navbarCollapse'>
-                            <span class='navbar-toggler-icon'></span>
-                        </button>
-                        <div class='collapse navbar-collapse justify-content-between px-3' id='navbarCollapse'>
-                            <div class='navbar-nav ml-auto py-0'>";
-                                foreach ( $this->userNavTabArr as $key=>$subArr ) {
-                                    $active = ($this->activePage==$key) ? "active" : "";
-                                    $html .= "<a href='".$subArr['redirect']."' class='nav-item nav-link $active'>".$subArr['name']."</a>";
-                                }
-        $html .= "
-                            </div>
-                        </div>
-                    </nav>
-                </div>
+
+    $logo = "./img/Logo.png";
+    $logo = $logo . "?" . filemtime("$logo");
+
+    $html = "
+    <div class='edibear-topline'></div>
+
+    <div class='edibear-navbar'>
+        <div class='edibear-nav-container'>
+
+            <div class='edibear-logo'>
+                <a href='./'>
+                    <img src='$logo' alt='Edibear'>
+                </a>
             </div>
-        ";
-        return $html;
+
+            <div class='edibear-menu'>";
+
+    foreach ($this->userNavTabArr as $key=>$subArr) {
+
+        $html .= "<a href='".$subArr['redirect']."' class='edibear-link'>
+                    ".$subArr['name']."
+                 </a>";
     }
+
+    $html .= "
+                <a href='#' class='edibear-challenge'>
+                    <i class='fa fa-trophy'></i>
+                </a>";
+
+    $html .= "
+                
+               <a href='./cart.php'>
+                  <i class='fa fa-shopping-cart'></i>
+                 Cart
+               </a>
+               ";
+
+    if (isset($_SESSION['session_tourism_user'])) {
+        $html .= "<a href='./account' class='edibear-signin'>
+                    <i class='fa fa-user'></i> Account
+                  </a>";
+    } else {
+        $html .= "<a href='./login' class='edibear-signin' id='cart-icon'>
+                    <i class='fa fa-user'></i> Sign In
+                  </a>";
+    }
+
+    $html .= "
+            </div>
+        </div>
+    </div>";
+
+    return $html;
+}
 
     public function printHomeCarousel($carouselDataArr) {
         $active = "active";
@@ -352,7 +400,7 @@ class HEADER {
 
 
 
-            <div class='container-fluid pl-0 pr-0' style='background-color:#95C523;'>
+            <div class='container-fluid pl-0 pr-0' style='background-color:#004925;'>
                 
                     <div class='col-lg-12 text-center '>
                         <p class='copyrighttext text-white mb-0'>Copyright &copy; <a href='./' class='text-white'>edibear</a>. All Rights Reserved.</a>
