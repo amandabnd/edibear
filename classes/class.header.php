@@ -78,6 +78,16 @@ class HEADER {
             "redirect"=>"./blogs",
             "icon"=>"fa fa-file-text-o text-danger"
         ),
+        "add-event"=>array(
+            "name"=>"Add Brave Heart Event",
+            "redirect"=>"./add-event",
+            "icon"=>"fa fa-flag text-warning"
+        ),
+        "event"=>array(
+            "name"=>"Brave Heart Events",
+            "redirect"=>"./event",
+            "icon"=>"fa fa-flag text-warning"
+        ),
         "add-ad1"=>array(
             "name"=>"Add Home Ad 1",
             "redirect"=>"./add-ad1",
@@ -103,6 +113,11 @@ class HEADER {
             "name"=>"Testimonials",
             "redirect"=>"./testimonials",
             "icon"=>"fa fa-comments-o text-primary"
+        ),
+        "orders"=>array(
+            "name"=>"Orders",
+            "redirect"=>"./order",
+            "icon"=>"ni ni-basket text-primary"
         ),
         "manage-users"=>array(
             "name"=>"Manage Users",
@@ -144,7 +159,7 @@ class HEADER {
 
     "challenge" => array(
         "name"=>"CHALLENGE",
-        "redirect"=>"./blogs"
+        "redirect"=>"./challenges"
     ),
 
     "study_packs" => array(
@@ -481,6 +496,12 @@ class HEADER {
             <script src='https://kit.fontawesome.com/42d5adcbca.js' crossorigin='anonymous'></script>
             <link href='./assets/css/nucleo-svg.css' rel='stylesheet' />
             <link id='pagestyle' href='./assets/css/argon-dashboard.css?v=2.0.4' rel='stylesheet' />
+            <style>
+                /* Remove default green header strip on admin pages */
+                .min-height-300.bg-primary.position-absolute.w-100 {
+                    background: transparent !important;
+                }
+            </style>
             <script src='./assets/js/plugins/jquery.min.js'></script>
         ";
         return $html;
@@ -529,7 +550,7 @@ class HEADER {
                     <ol class='breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5'>
                         <li class='breadcrumb-item text-sm'><a class='opacity-5 text-white' href='javascript:;'>Pages</a></li>
                     </ol>
-                    <h6 class='font-weight-bolder text-white mb-0'>$pageName</h6>
+                    <h6 class='font-weight-bolder mb-0' style='color: black !important;'>$pageName</h6>
                     </nav>
                     <div class='collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4' id='navbar'>
                     <div class='ms-md-auto pe-md-3 d-flex align-items-center'></div>

@@ -24,6 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for Brave Heart challenge categories
+--
+
+CREATE TABLE `braveheart_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Table structure for Brave Heart challenge events
+--
+
+CREATE TABLE `braveheart_events` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `title` varchar(200) NOT NULL,
+  `description` varchar(10000) NOT NULL,
+  `main_image` varchar(100) DEFAULT NULL,
+  `application_file` varchar(100) DEFAULT NULL,
+  `deadline_date` date DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Table structure for Brave Heart challenge winners
+--
+
+CREATE TABLE `braveheart_winners` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `position` int(11) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
 -- Table structure for table `ad1_descriptions`
 --
 
@@ -1164,6 +1205,43 @@ ALTER TABLE `tour_details`
 --
 ALTER TABLE `user_table`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Indexes for table `braveheart_categories`
+--
+ALTER TABLE `braveheart_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `braveheart_events`
+--
+ALTER TABLE `braveheart_events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_braveheart_event` (`event_id`);
+
+--
+-- AUTO_INCREMENT for table `braveheart_categories`
+--
+ALTER TABLE `braveheart_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `braveheart_events`
+--
+ALTER TABLE `braveheart_events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

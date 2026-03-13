@@ -23,13 +23,11 @@
 
 <body>
     <?php
-        echo $userHeader->printUserTopBar();        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
-        echo $widgets->userHeaderImage();       //Header Image
+        echo $userHeader->printUserNav();        //Topbar
     ?>
 
     <!-- About Start -->
-    <div class="container-fluid py-5">
+    <div class="container-fluid py-5" style="margin-top: 70px !important;">
         <div class="container">
             <i class="fa fa-home pt-1 pr-2 text-primary"></i><a href="./">Home</a><i class="fa fa-angle-right pt-1 px-2 text-primary"></i>Privay Policy
             <div class="row mt-3 mt-lg-0">

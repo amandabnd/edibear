@@ -70,6 +70,11 @@
     $stmt = $user->getConnection()->prepare($productQuery);
     $stmt->execute($params);
     $products = $stmt->fetchAll();
+
+    $braveHeartQuery = "SELECT * FROM braveheart_events WHERE status = 1 ORDER BY id DESC LIMIT 1";
+    $braveStmt = $user->getConnection()->prepare($braveHeartQuery);
+    $braveStmt->execute();
+    $recentChallenge = $braveStmt->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -114,9 +119,6 @@
 
 
 <?php //include 'eeeee.php';?>
-
-
-
     <?php 
         // echo $userHeader->printUserTopBar();        //Topbar
         echo $userHeader->printUserNav();       //Navbar
@@ -127,8 +129,6 @@
             echo $userHeader->printHomeCarousel($carouselData);
         } 
     ?>
-
-    
     <!-- Carousel End -->
 
     <div class="container-fluid edi-intro-section" id="ayubowan">
@@ -198,8 +198,8 @@
             <div class='row mt-5 justify-content-center'>
                 <div class="col-lg-10 col-md-12 row">
                     <?php
-                    echo $widgets->displayHowItWorksBlock3("FUN ACTIVITIES", "Find kids' school<br>homework-related items", "1.png");
-                        echo $widgets->displayHowItWorksBlock("WORKSHEETS", "Find a variety of beautiful<br>coloring pages", "3.png");
+                    echo $widgets->displayHowItWorksBlock3("WORKSHEETS", "Find kids' school<br>homework-related items", "3.png");
+                        echo $widgets->displayHowItWorksBlock("FUN ACTIVITIES", "Find a variety of beautiful<br>coloring pages", "1.png");
                         echo $widgets->displayHowItWorksBlock2("BRAIN BOOSTERS", "Find kids' workbooks &<br>relevant model papers", "2.png");
                         
                     ?>
@@ -262,66 +262,6 @@
 </div>
 
 </div>
-    <!--Search Section-->
-     <!--------
-    <div class="container-fluid py-4">
-        <div class="container py-5">
-            <div class="text-center">
-                <h1 class="text-primary">FIND WHAT YOU WANT</h1>
-            </div>
-             <div class='row mt-3 justify-content-center'>
-                <div class="col-lg-10 col-md-12 row">
-                <p class="text-justify">
-                In here, you can find awesome coloring pages, fun activity books, model papers, and all the information & study materials you need for your school assignments. Just click on the icon that has what you are looking for, and you are good to go!</p>
-                </div>
-            </div>
-            
-            <div class="row mt-3 justify-content-center">
-                <div class="col-md-3 mb-2 px-xl- text-center">
-                    <select id="language" name="language" class="green-input">
-                        <option value="">Language (Required)</option>
-                        <option value="1">Sinhala</option>
-                        <option value="2">Tamil</option>
-                        <option value="3">English</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-3 mb-2 px-xl- text-center">
-                    <select id="grade" name="grade" class="green-input">
-                        <option value="">Grade (Required)</option>
-                        <option value="1">LKG</option>
-                        <option value="2">UKG</option>
-                        <option value="3">Grade-1</option>
-                        <option value="4">Grade-2</option>
-                        <option value="5">Grade-3</option>
-                        <option value="6">Grade-4</option>
-                        <option value="7">Grade-5</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-3 mb-2 px-xl- text-center">
-                    <select id="main_category" name="main_category" class="green-input">
-                        <option value="">Category (Required)</option>
-                        <option value="1">Leisure Activities</option>
-                        <option value="2">Books & Papers</option>
-                        <option value="3">Study Packs</option>
-                    </select>
-                </div>
-                
-                <div class="col-md-3 mb-2 px-xl- text-center">
-                    <select id="sub_category" name="sub_category" class="green-input">
-                        <option value="">Sub Category</option>
-                        <option value="1">Animals</option>
-                    </select>
-                </div>
-            </div>
-            <div class="text-center pt-5 ">
-                <button class="btn btn-primary px-4 rounded search-btn" >SEARCH</button>
-            </div>
-         </div>
-        
-     </div>
-    ---------->
 
     <div class="container-fluid py-5" id="honey-market-section">
       <div class="container">
@@ -540,6 +480,48 @@ to sharpen your knowledge and brighten your brave hearts!
         </div>
     </div>
     <!-- Blog End -->
+
+    <div class="container-fluid py-5" style="background-color: #f9f9f9;">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="text-danger" style="font-weight: bold;">BRAVE HEART CHALLENGE</h1>
+            
+            <div class='row mt-3 justify-content-center'>
+                <div class="col-lg-10 col-md-12 row">
+                <p class="text-justify">
+                Explorer! We’ve reached the end of the adventure. It’s time to show off your amazing talents and celebrate everything you’ve learned along the way. I’ve set new missions with exciting challenges to test your skills! Grab your tools, join the fun, and you could even win a special prize. Let’s see what you can do!</p>
+                </div>
+            </div>
+        </div>
+
+        <?php if ($recentChallenge): ?>
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-10 text-center">
+                <h5 class="text-uppercase mb-3" style="letter-spacing: 1px; font-weight: 700;">
+                    UPCOMING – <?php echo htmlspecialchars($recentChallenge['title']); ?>
+                </h5>
+                
+                <div class="challenge-banner-container mb-4">
+                    <img src="./img/braveheart/<?php echo $recentChallenge['main_image']; ?>" 
+                         alt="Challenge Banner" 
+                         class="img-fluid rounded shadow-sm" 
+                         style="max-width: 100%; height: auto; border: 1px solid #ddd;">
+                </div>
+
+                <div class="mt-3">
+                    <a href="./challenges.php" class="btn btn-success btn-lg px-5 py-2" style="border-radius: 8px; font-weight: bold; background-color: #198754;">
+                        ACCEPT
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php else: ?>
+            <div class="text-center">
+                <p>New challenges are coming soon! Stay tuned, Explorer!</p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
 
     
     <!-- PDF Start -->

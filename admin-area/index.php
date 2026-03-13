@@ -118,6 +118,156 @@ our beautiful country. So reserve your tour with us.'>
   <link href="./assets/css/nucleo-svg.css" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="./assets/css/argon-dashboard.css?v=2.0.4" rel="stylesheet" />
+  <style>
+    body.admin-login-body {
+      background-color: #f9fafb;
+      font-family: "Open Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    }
+
+    .admin-login-main {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-page-wrapper {
+      width: 100%;
+      max-width: 420px;
+      padding: 24px 16px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .login-page-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .login-card {
+      background-color: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.18);
+      padding: 32px 28px 28px;
+    }
+
+    .login-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ef4444;
+      margin-bottom: 24px;
+    }
+
+    .login-label {
+      display: block;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .login-input-group .input-group-text {
+      background-color: #f9fafb;
+      border-radius: 10px 0 0 10px;
+      border-color: #e5e7eb;
+      color: #9ca3af;
+      font-size: 14px;
+    }
+
+    .login-input-group .form-control {
+      border-radius: 0 10px 10px 0;
+      border-color: #e5e7eb;
+      font-size: 14px;
+      padding: 10px 12px;
+      box-shadow: none;
+    }
+
+    .login-input-group .form-control:focus {
+      border-color: #16a34a;
+      box-shadow: 0 0 0 1px #bbf7d0;
+    }
+
+    .login-input-group.password-group .form-control {
+      border-radius: 0;
+      border-left: 0;
+      border-right: 0;
+    }
+
+    .login-input-group.password-group .input-group-text:first-child {
+      border-radius: 10px 0 0 10px;
+    }
+
+    .login-input-group.password-group .input-group-text.password-toggle {
+      border-radius: 0 10px 10px 0;
+      cursor: pointer;
+      border-left: 0;
+      color: #9ca3af;
+      transition: color 0.15s ease;
+    }
+
+    .login-input-group.password-group .input-group-text.password-toggle:hover {
+      color: #111827;
+    }
+
+    .login-forgot-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .login-forgot-link {
+      font-size: 12px;
+      color: #6b7280;
+      text-decoration: none;
+    }
+
+    .login-forgot-link:hover {
+      color: #16a34a;
+      text-decoration: underline;
+    }
+
+    .login-submit-btn {
+      background-color: #16a34a;
+      border-color: #16a34a;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 10px 0;
+      box-shadow: 0 10px 20px rgba(22, 163, 74, 0.35);
+    }
+
+    .login-submit-btn:hover {
+      background-color: #15803d;
+      border-color: #15803d;
+    }
+
+    .login-logo {
+      margin-bottom: 10px;
+    }
+
+    .login-logo img {
+      max-width: 140px;
+      height: auto;
+    }
+
+    @media (max-width: 576px) {
+      .login-card {
+        padding: 24px 20px 22px;
+      }
+
+      .login-page-wrapper {
+        padding-top: 40px;
+        padding-bottom: 40px;
+      }
+    }
+  </style>
   <!--hCaptcha
   <script src='https://www.hCaptcha.com/1/api.js' async defer></script> -->
    <!--reCaptcha-->
@@ -125,57 +275,73 @@ our beautiful country. So reserve your tour with us.'>
   <script src="./assets/js/plugins/jquery.min.js"></script>
 </head>
 
-<body class="">
-  <main class="main-content  mt-0">
-    <section>
-      <div class="page-header min-vh-100">
-        <div class="container">
-          <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
-              <div class="card card-plain">
-                <div class="card-header pb-0 text-start">
-                  <div class="row justify-content-center py-5">
-                    <img src="../img/Logo.png" style="max-width: 250px;" alt="Logo">
-                  </div>
-                  <h4 class="font-weight-bolder">Sign In</h4>
-                  <p class="mb-0">Enter your email and password to sign in</p>
-                </div>
-                <div class="card-body">
-                   <form id="loginForm" action="" method="POST">
-                    <div class="mb-3">
-                      <input type="email" class="form-control form-control-lg" name="inputEmail" placeholder="Email" aria-label="Email" required>
-                    </div>
-                    <div class="mb-3">
-                      <input type="password" class="form-control form-control-lg" name="inputPassword" placeholder="Password" aria-label="Password" required>
-                    </div>
-                    <div class="mb-3">
-                      <!-- <div class="h-captcha" data-sitekey="10000000-ffff-ffff-ffff-000000000001" data-callback="correctCaptcha"></div>
-                      <div class="h-captcha" data-sitekey="27f5a1ea-c309-4a54-99e0-f8efd7c1c05a" data-callback="correctCaptcha"></div> -->
-                    </div>
-                    <div class="text-center">
-                      <!--<input type="submit" id="loginSubmit" name="loginSubmit" value="Sign in" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">-->
-                      <input type="hidden" name="form_submitted" value="true">
-                     <button  id="loginSubmit" name="loginSubmit"
-                        class="g-recaptcha btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0" 
-                        type="submit"
-                        >Submit</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-              <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('./assets/img/polar1.png');
-          background-size: cover;">
-                <!-- <span class="mask bg-gradient-primary opacity-6"></span> -->
-                
-                <p class="text-white position-relative"></p>
-              </div>
+<body class="admin-login-body">
+  <main class="admin-login-main">
+    <div class="login-page-wrapper">
+      <div class="login-logo">
+        <img src="../img/Logo.png" alt="Logo">
+      </div>
+      <h2 class="login-page-title">Admin Login</h2>
+
+      <div class="login-card">
+        <h3 class="login-card-title">Sign In</h3>
+
+        <form id="loginForm" action="" method="POST">
+          <div class="mb-3">
+            <label class="login-label" for="inputEmail">E-mail</label>
+            <div class="input-group login-input-group">
+              <span class="input-group-text">
+                <i class="ni ni-email-83"></i>
+              </span>
+              <input
+                type="email"
+                id="inputEmail"
+                class="form-control"
+                name="inputEmail"
+                placeholder="E-mail"
+                aria-label="Email"
+                required
+              >
             </div>
           </div>
-        </div>
+
+          <div class="mb-1">
+            <label class="login-label" for="inputPassword">Password</label>
+            <div class="input-group login-input-group password-group">
+              <span class="input-group-text">
+                <i class="ni ni-lock-circle-open"></i>
+              </span>
+              <input
+                type="password"
+                id="inputPassword"
+                class="form-control"
+                name="inputPassword"
+                placeholder="Password"
+                aria-label="Password"
+                required
+              >
+              <span class="input-group-text password-toggle" id="passwordToggle">
+                <i class="ni ni-eye-17"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="login-forgot-row">
+            <a href="#" class="login-forgot-link">Forgot password?</a>
+          </div>
+
+          <input type="hidden" name="form_submitted" value="true">
+          <button
+            id="loginSubmit"
+            name="loginSubmit"
+            class="g-recaptcha btn login-submit-btn w-100 mt-1"
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
       </div>
-    </section>
+    </div>
   </main>
   <?php
     if ($incorrectUsernamePassword) {
@@ -229,16 +395,24 @@ our beautiful country. So reserve your tour with us.'>
 
     <script>
 document.getElementById("loginForm").addEventListener("submit", function(e) {
-
-    console.log("FORM SUBMITTED");
-
     const email = document.querySelector("input[name='inputEmail']").value;
     const password = document.querySelector("input[name='inputPassword']").value;
-
-    console.log("Email entered:", email);
-    console.log("Password length:", password.length);
-
+    // Basic front-end presence checks; main validation is handled on the server.
+    if (!email || !password) {
+        e.preventDefault();
+    }
 });
+
+const passwordInput = document.getElementById("inputPassword");
+const passwordToggle = document.getElementById("passwordToggle");
+
+if (passwordInput && passwordToggle) {
+  passwordToggle.addEventListener("click", function () {
+    const isPassword = passwordInput.getAttribute("type") === "password";
+    passwordInput.setAttribute("type", isPassword ? "text" : "password");
+    this.classList.toggle("active", isPassword);
+  });
+}
 </script>
 
 </body>
