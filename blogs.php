@@ -75,13 +75,12 @@
 
 <body>
     <?php
-        echo $userHeader->printUserTopBar();        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
-        echo $widgets->userHeaderImage();       //Header Image
+        // Match navigation with index.php
+        echo $userHeader->printUserNav();       // Navbar
     ?>
 
     <!-- Blog Start -->
-    <div class="container-fluid py-3">
+    <div class="container-fluid py-3" style="margin-top: 110px !important;">
         <div class="container pt-3">
             <i class="fa fa-home pt-1 pr-2 text-primary"></i><a href="./">Home</a><i class="fa fa-angle-right pt-1 px-2 text-primary"></i>Fun Activities
             <h4 class="text-warning mt-2">Fun Activities</h4>

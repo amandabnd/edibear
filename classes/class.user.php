@@ -6,6 +6,11 @@ class USER{
 	private $conn;
 	private $inactive = 1200; 
 	private $bindParamArr = array();
+	
+	public function getConnection() {
+        return $this->conn;
+    }
+	
 
 	public function __construct(){
 		$database = new Database();

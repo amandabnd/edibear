@@ -57,6 +57,16 @@ class HEADER {
             "redirect"=>"./homework",
             "icon"=>"fa fa-file-text-o text-danger"
         ),
+        "add-product"=>array(
+            "name"=>"Add Product",
+            "redirect"=>"./add-products",
+            "icon"=>"fa fa-pencil-square-o text-warning"
+        ),
+        "products"=>array(
+            "name"=>"Products",
+            "redirect"=>"./products",
+            "icon"=>"fa fa-file-text-o text-danger"
+        ),
 
         "add-blog"=>array(
             "name"=>"Add Blog",
@@ -67,6 +77,16 @@ class HEADER {
             "name"=>"Blogs",
             "redirect"=>"./blogs",
             "icon"=>"fa fa-file-text-o text-danger"
+        ),
+        "add-event"=>array(
+            "name"=>"Add Brave Heart Event",
+            "redirect"=>"./add-event",
+            "icon"=>"fa fa-flag text-warning"
+        ),
+        "event"=>array(
+            "name"=>"Brave Heart Events",
+            "redirect"=>"./event",
+            "icon"=>"fa fa-flag text-warning"
         ),
         "add-ad1"=>array(
             "name"=>"Add Home Ad 1",
@@ -94,6 +114,11 @@ class HEADER {
             "redirect"=>"./testimonials",
             "icon"=>"fa fa-comments-o text-primary"
         ),
+        "orders"=>array(
+            "name"=>"Orders",
+            "redirect"=>"./order",
+            "icon"=>"ni ni-basket text-primary"
+        ),
         "manage-users"=>array(
             "name"=>"Manage Users",
             "redirect"=>"./manage-users",
@@ -111,36 +136,38 @@ class HEADER {
         )
     );
     private $userNavTabArr = array(
-        "home" => array(
-            "name"=>"Home",
-            "redirect"=>"./"
-        ),
-        "blogs" => array(
-            "name"=>"Blogs",
-            "redirect"=>"./blogs"
-        ),
-        
-        "pdf" => array(
-            "name"=>"pdfs",
-            "redirect"=>"./pdf"
-        ),
-        "homework" => array(
-            "name"=>"Homework",
-            "redirect"=>"./homework"
-        ),
-        "books" => array(
-            "name"=>"Books",
-            "redirect"=>"./books"
-        ),
-        "testimonials" => array(
-            "name"=>"Testimonials",
-            "redirect"=>"./testimonials"
-        ),
-        "about" => array(
-            "name"=>"About",
-            "redirect"=>"./about"
-        ),
-    );
+
+    "home" => array(
+        "name"=>"HOME",
+        "redirect"=>"./"
+    ),
+
+    "learn" => array(
+        "name"=>"LEARN",
+        "redirect"=>"./pdf"
+    ),
+
+    "shop" => array(
+        "name"=>"SHOP",
+        "redirect"=>"./product_page"
+    ),
+
+    "play" => array(
+        "name"=>"PLAY",
+        "redirect"=>"./blogs"
+    ),
+
+    "challenge" => array(
+        "name"=>"CHALLENGE",
+        "redirect"=>"./challenges"
+    ),
+
+    "study_packs" => array(
+        "name"=>"Study Packs",
+        "redirect"=>"./homework"
+    )
+
+);
 
     public function __construct($activePage='') {
         $this->activePage = $activePage;
@@ -155,7 +182,12 @@ class HEADER {
     }
 
     public function printUserHeader($pageName="", $ogDesc="“edibear” is a website that provides a variety of kids' coloring pages, activity books, relevant model papers, school related study materials and fun activities for developing the abilities of kids. ", $ogImg="img/Web pic/Cover.jpg") {
-        $pageName = ($pageName!="") ? $pageName : $this->userNavTabArr[$this->activePage]['name'];
+        // Check if the key exists before trying to access it
+    if ($pageName == "" && isset($this->userNavTabArr[$this->activePage])) {
+        $pageName = $this->userNavTabArr[$this->activePage]['name'];
+    } elseif ($pageName == "") {
+        $pageName = "Edibear"; // Default fallback name
+    }
         $mainCSS = "css/style.css";
         $mainCSS = $mainCSS . "?" . filemtime("$mainCSS");
         $html = "
@@ -200,6 +232,7 @@ class HEADER {
                         <span class='nav-col-tab cursor-pointer' onclick=location.href='./shop'>Shop</span>
                         <span class='nav-col-tab cursor-pointer' onclick=location.href='./about'>About</span>
                         --------->
+                        
 
 
                         </div>
@@ -224,31 +257,130 @@ class HEADER {
     }
 
     public function printUserNav() {
-        $html = "
-            <div class='container-fluid position-relative nav-bar p-0'>
-                <div class='container-lg position-relative p-0 px-lg-3' style='z-index: 9;'>
-                    <nav class='navbar navbar-expand-lg bg-light navbar-light shadow-lg py-3 py-lg-0 pl-3 pl-lg-5'>
-                        <a href='./' class='navbar-brand'>
-                            <img class='headerLogo cursor-pointer image-responsive' src='./img/Logo.png' alt='logo'>
-                        </a>
-                        <button type='button' class='navbar-toggler' data-toggle='collapse' data-target='#navbarCollapse'>
-                            <span class='navbar-toggler-icon'></span>
-                        </button>
-                        <div class='collapse navbar-collapse justify-content-between px-3' id='navbarCollapse'>
-                            <div class='navbar-nav ml-auto py-0'>";
-                                foreach ( $this->userNavTabArr as $key=>$subArr ) {
-                                    $active = ($this->activePage==$key) ? "active" : "";
-                                    $html .= "<a href='".$subArr['redirect']."' class='nav-item nav-link $active'>".$subArr['name']."</a>";
-                                }
-        $html .= "
-                            </div>
-                        </div>
-                    </nav>
-                </div>
+
+    $logo = "./img/Logo.png";
+    $logo = $logo . "?" . filemtime("$logo");
+
+    $html = "
+    <div class='edibear-topline'></div>
+
+    <div class='edibear-navbar'>
+        <div class='edibear-nav-container'>
+
+            <div class='edibear-logo'>
+                <a href='./'>
+                    <img src='$logo' alt='Edibear'>
+                </a>
             </div>
-        ";
-        return $html;
+
+            <div class='edibear-menu'>";
+
+    foreach ($this->userNavTabArr as $key=>$subArr) {
+
+        $html .= "<a href='".$subArr['redirect']."' class='edibear-link'>
+                    ".$subArr['name']."
+                 </a>";
     }
+
+    $html .= "
+                <a href='#' class='edibear-challenge'>
+                    <i class='fa fa-trophy'></i>
+                </a>";
+
+    $html .= "
+                
+               <a href='#' onclick='checkCartAccess()' id='cart-icon'>
+                  <i class='fa fa-shopping-cart'></i>
+                 Cart
+               </a>
+               ";
+
+    if (isset($_SESSION['session_tourism_user'])) {
+        $html .= "<a href='./account' class='edibear-signin'>
+                    <i class='fa fa-user'></i> Account
+                  </a>";
+    } else {
+        $html .= "<a href='./login' class='edibear-signin'>
+                    <i class='fa fa-user'></i> Sign In
+                  </a>";
+    }
+
+    $html .= "
+            </div>
+        </div>
+    </div>
+    <script>
+        function checkCartAccess() {
+            var isLoggedIn = " . (isset($_SESSION['session_tourism_user']) ? 'true' : 'false') . ";
+            if (!isLoggedIn) {
+                showLoginPopup();
+            } else {
+                window.location.href = './cart.php';
+            }
+        }
+        
+        function showLoginPopup() {
+            // Create popup HTML
+            const popup = document.createElement('div');
+            popup.id = 'login-popup';
+            popup.innerHTML = `
+                <div style=\"
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                \">
+                    <div style=\"
+                        background: white;
+                        padding: 30px;
+                        border-radius: 10px;
+                        text-align: center;
+                        max-width: 400px;
+                        width: 90%;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                    \">
+                        <h3 style=\"margin-bottom: 20px; color: #333;\">Please login to continue</h3>
+                        <p style=\"margin-bottom: 25px; color: #666;\">You need to be logged in to access your cart.</p>
+                        <a href=\"./login\" style=\"
+                            display: inline-block;
+                            background: #007bff;
+                            color: white;
+                            padding: 12px 24px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-weight: bold;
+                            transition: background 0.3s;
+                        \" onmouseover=\"this.style.background='#0056b3'\" onmouseout=\"this.style.background='#007bff'\">Go to Login</a>
+                        <br><br>
+                        <button onclick=\"closeLoginPopup()\" style=\"
+                            background: none;
+                            border: none;
+                            color: #666;
+                            cursor: pointer;
+                            text-decoration: underline;
+                        \">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        }
+
+        function closeLoginPopup() {
+            const popup = document.getElementById('login-popup');
+            if (popup) {
+                popup.remove();
+            }
+        }
+    </script>";
+
+    return $html;
+}
 
     public function printHomeCarousel($carouselDataArr) {
         $active = "active";
@@ -352,7 +484,7 @@ class HEADER {
 
 
 
-            <div class='container-fluid pl-0 pr-0' style='background-color:#95C523;'>
+            <div class='container-fluid pl-0 pr-0' style='background-color:#004925;'>
                 
                     <div class='col-lg-12 text-center '>
                         <p class='copyrighttext text-white mb-0'>Copyright &copy; <a href='./' class='text-white'>edibear</a>. All Rights Reserved.</a>
@@ -433,6 +565,12 @@ class HEADER {
             <script src='https://kit.fontawesome.com/42d5adcbca.js' crossorigin='anonymous'></script>
             <link href='./assets/css/nucleo-svg.css' rel='stylesheet' />
             <link id='pagestyle' href='./assets/css/argon-dashboard.css?v=2.0.4' rel='stylesheet' />
+            <style>
+                /* Remove default green header strip on admin pages */
+                .min-height-300.bg-primary.position-absolute.w-100 {
+                    background: transparent !important;
+                }
+            </style>
             <script src='./assets/js/plugins/jquery.min.js'></script>
         ";
         return $html;
@@ -481,7 +619,7 @@ class HEADER {
                     <ol class='breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5'>
                         <li class='breadcrumb-item text-sm'><a class='opacity-5 text-white' href='javascript:;'>Pages</a></li>
                     </ol>
-                    <h6 class='font-weight-bolder text-white mb-0'>$pageName</h6>
+                    <h6 class='font-weight-bolder mb-0' style='color: black !important;'>$pageName</h6>
                     </nav>
                     <div class='collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4' id='navbar'>
                     <div class='ms-md-auto pe-md-3 d-flex align-items-center'></div>

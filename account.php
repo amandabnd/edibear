@@ -119,16 +119,20 @@ our beautiful country. So reserve your tour with us.' />
 
 <body>
     <?php
-        echo $userHeader->printUserTopBar(true);        //Topbar
-        //echo $userHeader->printUserNav();       //Navbar
-        echo $widgets->userHeaderImage();       //Header Image
+        echo $userHeader->printUserNav(true);        //Topbar
+        
     ?>
 
     <!-- About Start -->
-    <div class="container-fluid py-4">
+    <div class="container-fluid py-4" style="margin-top: 70px !important;">
         <div class="container">
             <i class="fa fa-home pt-1 pr-2 text-primary"></i><a href="./">Home</a><i class="fa fa-angle-right pt-1 px-2 text-primary"></i>Account
             <h4 class="text-warning mt-2">Account</h4>
+            <div class="text-right mb-3">
+                <a href="./logout.php" class="btn btn-danger">
+                    <i class="fa fa-sign-out"></i> Logout
+                </a>
+            </div>
         </div>
     </div>
     <!-- About End -->

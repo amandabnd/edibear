@@ -7,6 +7,15 @@
   $user = new USER();
   $widgets = new WIDGETS();
   $editMode = false;
+  $currentBlogTag = "";
+  $currentBlogTitle = "";
+  $currentBlogMainDescription = "";
+  $currentBlogVideoUrl = "";
+  $currentBlogVideoStatus = "";
+  $currentBlogMainImage = "";
+  $currentBlogpdfupload = "";
+  $currentBlogID = 0;
+
 
   if ( $user->is_loggedin() ) {
     if ( $user->checkTimeout() ) {

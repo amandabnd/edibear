@@ -24,6 +24,47 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for Brave Heart challenge categories
+--
+
+CREATE TABLE `braveheart_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Table structure for Brave Heart challenge events
+--
+
+CREATE TABLE `braveheart_events` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `title` varchar(200) NOT NULL,
+  `description` varchar(10000) NOT NULL,
+  `main_image` varchar(100) DEFAULT NULL,
+  `application_file` varchar(100) DEFAULT NULL,
+  `deadline_date` date DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Table structure for Brave Heart challenge winners
+--
+
+CREATE TABLE `braveheart_winners` (
+  `id` int(11) NOT NULL,
+  `event_id` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `image` varchar(100) NOT NULL,
+  `position` int(11) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
 -- Table structure for table `ad1_descriptions`
 --
 
@@ -336,6 +377,87 @@ INSERT INTO `books_details` (`id`, `tag`, `title`, `description`, `image`, `vide
 (122, 'TIME', 'TELLING THE TIME', 'Telling the time - twelve to three ', '122.jpg', '', 0, 1, '2025-06-13 09:31:06', 'Twelve to Three.pdf', 6, NULL, NULL, NULL, NULL),
 (123, 'TIME', 'TELLING THE TIME', 'Telling the time - four to seven', '123.jpg', '', 0, 1, '2025-06-13 09:34:11', 'Four to Seven.pdf', 8, NULL, NULL, NULL, NULL),
 (124, 'TIME', 'TELLING THE TIME', 'Telling the time - eight to eleven ', '124.jpg', '', 0, 1, '2025-06-13 09:37:04', 'Eight to Eleven.pdf', 10, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_categories`
+--
+
+CREATE TABLE `product_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `sub_category_id` int(11) DEFAULT NULL,
+  `brand` varchar(100) DEFAULT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `discount_percentage` decimal(5,2) DEFAULT 0.00,
+  `discounted_price` decimal(10,2) DEFAULT 0.00,
+  `age_group` varchar(50) DEFAULT NULL,
+  `description` text,
+  `language` varchar(50) DEFAULT NULL,
+  `author` varchar(100) DEFAULT NULL,
+  `stock` int(11) NOT NULL DEFAULT 0,
+  `image` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `session_id` varchar(128) DEFAULT NULL,
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `order_number` varchar(32) NOT NULL,
+  `session_id` varchar(128) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `company_name` varchar(150) DEFAULT NULL,
+  `address_line` varchar(255) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `postal_code` varchar(20) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `mobile` varchar(50) NOT NULL,
+  `payment_method` enum('cod','bank_transfer','card') NOT NULL,
+  `payment_status` enum('pending','paid','failed') NOT NULL DEFAULT 'pending',
+  `subtotal` decimal(10,2) NOT NULL,
+  `shipping` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -953,10 +1075,39 @@ ALTER TABLE `books_details`
   ADD KEY `fk_sub_cat` (`sub_cat_id`);
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_cart_product` (`product_id`),
+  ADD KEY `fk_cart_user` (`user_id`);
+
+--
 -- Indexes for table `carousel`
 --
 ALTER TABLE `carousel`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_number` (`order_number`);
+
+--
+-- Indexes for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_product_category` (`category_id`),
+  ADD KEY `fk_product_subcategory` (`sub_category_id`);
 
 --
 -- Indexes for table `grades`
@@ -1106,10 +1257,34 @@ ALTER TABLE `books_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `carousel`
 --
 ALTER TABLE `carousel`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `homework_descriptions`
@@ -1166,14 +1341,87 @@ ALTER TABLE `user_table`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- Indexes for table `braveheart_categories`
+--
+ALTER TABLE `braveheart_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `braveheart_events`
+--
+ALTER TABLE `braveheart_events`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_braveheart_event` (`event_id`);
+
+--
+-- AUTO_INCREMENT for table `braveheart_categories`
+--
+ALTER TABLE `braveheart_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `braveheart_events`
+--
+ALTER TABLE `braveheart_events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  ADD CONSTRAINT `fk_braveheart_event` FOREIGN KEY (`event_id`) REFERENCES `braveheart_events` (`id`);
+
+--
+-- Constraints for table `ad1_descriptions`
+--
+ALTER TABLE `ad1_descriptions`
+  ADD CONSTRAINT `FK_ad1_id` FOREIGN KEY (`ad1_id`) REFERENCES `ad1_details` (`id`);
+
+--
+-- Constraints for table `ad2_descriptions`
+--
+ALTER TABLE `ad2_descriptions`
+  ADD CONSTRAINT `FK_ad2_id` FOREIGN KEY (`ad2_id`) REFERENCES `ad2_details` (`id`);
 
 --
 -- Constraints for table `blog_descriptions`
 --
 ALTER TABLE `blog_descriptions`
   ADD CONSTRAINT `FK_blog_id` FOREIGN KEY (`blog_id`) REFERENCES `blog_details` (`id`);
+
+--
+-- Constraints for table `books_descriptions`
+--
+ALTER TABLE `books_descriptions`
+  ADD CONSTRAINT `FK_books_id` FOREIGN KEY (`books_id`) REFERENCES `books_details` (`id`);
+
+--
+-- Constraints for table `homework_descriptions`
+--
+ALTER TABLE `homework_descriptions`
+  ADD CONSTRAINT `FK_homework_id` FOREIGN KEY (`homework_id`) REFERENCES `homework_details` (`id`);
+
+--
+-- Constraints for table `pdf_descriptions`
+--
+ALTER TABLE `pdf_descriptions`
+  ADD CONSTRAINT `FK_pdf_id` FOREIGN KEY (`pdf_id`) REFERENCES `pdf_details` (`id`);
 
 --
 -- Constraints for table `books_details`
@@ -1213,7 +1461,20 @@ ALTER TABLE `tour_day_details`
 --
 ALTER TABLE `tour_sub_images`
   ADD CONSTRAINT `FK_tour_id` FOREIGN KEY (`tour_id`) REFERENCES `tour_details` (`id`);
-COMMIT;
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `fk_cart_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`user_id`) REFERENCES `tourists` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_product_subcategory` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`) ON DELETE SET NULL;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

@@ -39,6 +39,9 @@
         $user->updateTable("carousel", array("src"=>$inputMainVideoURL, "status"=>$inputMainVideoStatus), array("id"=>$inputMainVideoID));
         echo "<script>alert('Successfully updated the Main Video');location.href='./home-page'</script>";
       }
+      $homeMainVideoURL = "";
+      $homeMainVideoStatus = "";
+      $homeMainVideoID = 0;
       foreach ( $user->fetchAll(array("id","src","status"), array("carousel"), array("type"=>"main")) as $homeMainVideoData ) {
         $homeMainVideoID = $homeMainVideoData['id'];
         $homeMainVideoURL = $homeMainVideoData['src'];
@@ -148,7 +151,7 @@ our beautiful country. So reserve your tour with us.' />
               <div class="row justify-content-center">
                 <div class="col-md-6">
                   <div class="embed-responsive embed-responsive-16by9 text-center">
-                    <iframe class="embed-responsive-item" src=<?php echo $homeMainVideoURL;?> allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" src="<?php echo $homeMainVideoURL;?>" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                   </div>
                 </div>
                 <div class="col-md-6">

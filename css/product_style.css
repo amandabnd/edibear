@@ -1,0 +1,101 @@
+/* General Layout */
+.treasure-title {
+    font-weight: 800;
+    color: #444;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+/* Filter Styling */
+.filter-wrapper select {
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #eee;
+    padding: 5px;
+    font-size: 14px;
+    color: #28a745;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    margin-bottom: 15px;
+}
+
+/* Card Styling */
+.treasure-card {
+    background: #fff;
+    padding: 10px;
+    transition: 0.3s;
+    text-align: center;
+}
+
+.treasure-card .img-container {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.treasure-card img {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.product-name {
+    font-size: 13px;
+    font-weight: 600;
+    height: 35px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.price-box {
+    margin-bottom: 10px;
+    min-height: 40px;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #ff5e5e;
+    font-size: 12px;
+    display: block;
+}
+
+.new-price {
+    font-weight: 700;
+    font-size: 14px;
+    color: #333;
+}
+
+.collect-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 25px;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.collect-btn:hover {
+    background-color: #218838;
+}
+
+/* Pagination UI Styling */
+.pagination-ui .page-btn {
+    display: inline-block;
+    padding: 5px 12px;
+    border: 1px solid #ddd;
+    margin: 0 2px;
+    color: #ff5e5e;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.pagination-ui .page-btn.active {
+    background-color: #ff5e5e;
+    color: white;
+    border-color: #ff5e5e;
+}

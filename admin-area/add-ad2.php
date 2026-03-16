@@ -7,6 +7,14 @@
   $user = new USER();
   $widgets = new WIDGETS();
   $editMode = false;
+  $currentad2Tag = "";
+  $currentad2Title = "";
+  $currentad2MainDescription = "";
+  $currentad2VideoUrl = "";
+  $currentad2VideoStatus = "";
+  $currentad2MainImage = "";
+  $currentad2adlink = "";
+  $currentad2ID = 0;
 
   if ( $user->is_loggedin() ) {
     if ( $user->checkTimeout() ) {
