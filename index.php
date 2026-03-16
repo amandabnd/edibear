@@ -11,6 +11,7 @@ And also add a loggout button in account page. -->
     $userHeader = new HEADER("home");
     $user = new USER();
     $widgets = new WIDGETS();
+    <!-- DEPLOY-TEST 2026-03-16 -->
 ?>
 <?php
     // Fetch categories and subcategories from the database

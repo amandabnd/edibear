@@ -395,6 +395,73 @@ CREATE TABLE `product_categories` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `products`
+--
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `sub_category_id` int(11) DEFAULT NULL,
+  `brand` varchar(100) DEFAULT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `discount_percentage` decimal(5,2) DEFAULT 0.00,
+  `discounted_price` decimal(10,2) DEFAULT 0.00,
+  `age_group` varchar(50) DEFAULT NULL,
+  `description` text,
+  `language` varchar(50) DEFAULT NULL,
+  `author` varchar(100) DEFAULT NULL,
+  `stock` int(11) NOT NULL DEFAULT 0,
+  `image` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `session_id` varchar(128) DEFAULT NULL,
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `order_number` varchar(32) NOT NULL,
+  `session_id` varchar(128) NOT NULL,
+  `first_name` varchar(100) NOT NULL,
+  `last_name` varchar(100) NOT NULL,
+  `company_name` varchar(150) DEFAULT NULL,
+  `address_line` varchar(255) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `postal_code` varchar(20) NOT NULL,
+  `district` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `mobile` varchar(50) NOT NULL,
+  `payment_method` enum('cod','bank_transfer','card') NOT NULL,
+  `payment_status` enum('pending','paid','failed') NOT NULL DEFAULT 'pending',
+  `subtotal` decimal(10,2) NOT NULL,
+  `shipping` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `carousel`
 --
 
