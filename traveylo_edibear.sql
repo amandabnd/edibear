@@ -381,6 +381,20 @@ INSERT INTO `books_details` (`id`, `tag`, `title`, `description`, `image`, `vide
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `product_categories`
+--
+
+CREATE TABLE `product_categories` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text,
+  `status` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `carousel`
 --
 
@@ -994,10 +1008,39 @@ ALTER TABLE `books_details`
   ADD KEY `fk_sub_cat` (`sub_cat_id`);
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_cart_product` (`product_id`),
+  ADD KEY `fk_cart_user` (`user_id`);
+
+--
 -- Indexes for table `carousel`
 --
 ALTER TABLE `carousel`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `order_number` (`order_number`);
+
+--
+-- Indexes for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `products`
+--
+ALTER TABLE `products`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_product_category` (`category_id`),
+  ADD KEY `fk_product_subcategory` (`sub_category_id`);
 
 --
 -- Indexes for table `grades`
@@ -1147,10 +1190,34 @@ ALTER TABLE `books_details`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
+-- AUTO_INCREMENT for table `cart`
+--
+ALTER TABLE `cart`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `carousel`
 --
 ALTER TABLE `carousel`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `product_categories`
+--
+ALTER TABLE `product_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `products`
+--
+ALTER TABLE `products`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `homework_descriptions`
@@ -1248,10 +1315,46 @@ ALTER TABLE `braveheart_winners`
 --
 
 --
+-- Constraints for table `braveheart_winners`
+--
+ALTER TABLE `braveheart_winners`
+  ADD CONSTRAINT `fk_braveheart_event` FOREIGN KEY (`event_id`) REFERENCES `braveheart_events` (`id`);
+
+--
+-- Constraints for table `ad1_descriptions`
+--
+ALTER TABLE `ad1_descriptions`
+  ADD CONSTRAINT `FK_ad1_id` FOREIGN KEY (`ad1_id`) REFERENCES `ad1_details` (`id`);
+
+--
+-- Constraints for table `ad2_descriptions`
+--
+ALTER TABLE `ad2_descriptions`
+  ADD CONSTRAINT `FK_ad2_id` FOREIGN KEY (`ad2_id`) REFERENCES `ad2_details` (`id`);
+
+--
 -- Constraints for table `blog_descriptions`
 --
 ALTER TABLE `blog_descriptions`
   ADD CONSTRAINT `FK_blog_id` FOREIGN KEY (`blog_id`) REFERENCES `blog_details` (`id`);
+
+--
+-- Constraints for table `books_descriptions`
+--
+ALTER TABLE `books_descriptions`
+  ADD CONSTRAINT `FK_books_id` FOREIGN KEY (`books_id`) REFERENCES `books_details` (`id`);
+
+--
+-- Constraints for table `homework_descriptions`
+--
+ALTER TABLE `homework_descriptions`
+  ADD CONSTRAINT `FK_homework_id` FOREIGN KEY (`homework_id`) REFERENCES `homework_details` (`id`);
+
+--
+-- Constraints for table `pdf_descriptions`
+--
+ALTER TABLE `pdf_descriptions`
+  ADD CONSTRAINT `FK_pdf_id` FOREIGN KEY (`pdf_id`) REFERENCES `pdf_details` (`id`);
 
 --
 -- Constraints for table `books_details`
@@ -1291,7 +1394,20 @@ ALTER TABLE `tour_day_details`
 --
 ALTER TABLE `tour_sub_images`
   ADD CONSTRAINT `FK_tour_id` FOREIGN KEY (`tour_id`) REFERENCES `tour_details` (`id`);
-COMMIT;
+
+--
+-- Constraints for table `cart`
+--
+ALTER TABLE `cart`
+  ADD CONSTRAINT `fk_cart_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_cart_user` FOREIGN KEY (`user_id`) REFERENCES `tourists` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `products`
+--
+ALTER TABLE `products`
+  ADD CONSTRAINT `fk_product_category` FOREIGN KEY (`category_id`) REFERENCES `product_categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_product_subcategory` FOREIGN KEY (`sub_category_id`) REFERENCES `sub_category` (`id`) ON DELETE SET NULL;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

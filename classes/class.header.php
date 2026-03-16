@@ -289,7 +289,7 @@ class HEADER {
 
     $html .= "
                 
-               <a href='./cart.php'>
+               <a href='#' onclick='checkCartAccess()' id='cart-icon'>
                   <i class='fa fa-shopping-cart'></i>
                  Cart
                </a>
@@ -300,7 +300,7 @@ class HEADER {
                     <i class='fa fa-user'></i> Account
                   </a>";
     } else {
-        $html .= "<a href='./login' class='edibear-signin' id='cart-icon'>
+        $html .= "<a href='./login' class='edibear-signin'>
                     <i class='fa fa-user'></i> Sign In
                   </a>";
     }
@@ -308,7 +308,76 @@ class HEADER {
     $html .= "
             </div>
         </div>
-    </div>";
+    </div>
+    <script>
+        function checkCartAccess() {
+            var isLoggedIn = " . (isset($_SESSION['session_tourism_user']) ? 'true' : 'false') . ";
+            if (!isLoggedIn) {
+                showLoginPopup();
+            } else {
+                window.location.href = './cart.php';
+            }
+        }
+        
+        function showLoginPopup() {
+            // Create popup HTML
+            const popup = document.createElement('div');
+            popup.id = 'login-popup';
+            popup.innerHTML = `
+                <div style=\"
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                \">
+                    <div style=\"
+                        background: white;
+                        padding: 30px;
+                        border-radius: 10px;
+                        text-align: center;
+                        max-width: 400px;
+                        width: 90%;
+                        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                    \">
+                        <h3 style=\"margin-bottom: 20px; color: #333;\">Please login to continue</h3>
+                        <p style=\"margin-bottom: 25px; color: #666;\">You need to be logged in to access your cart.</p>
+                        <a href=\"./login\" style=\"
+                            display: inline-block;
+                            background: #007bff;
+                            color: white;
+                            padding: 12px 24px;
+                            text-decoration: none;
+                            border-radius: 5px;
+                            font-weight: bold;
+                            transition: background 0.3s;
+                        \" onmouseover=\"this.style.background='#0056b3'\" onmouseout=\"this.style.background='#007bff'\">Go to Login</a>
+                        <br><br>
+                        <button onclick=\"closeLoginPopup()\" style=\"
+                            background: none;
+                            border: none;
+                            color: #666;
+                            cursor: pointer;
+                            text-decoration: underline;
+                        \">Close</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(popup);
+        }
+
+        function closeLoginPopup() {
+            const popup = document.getElementById('login-popup');
+            if (popup) {
+                popup.remove();
+            }
+        }
+    </script>";
 
     return $html;
 }

@@ -148,19 +148,34 @@ $products = $stmt->fetchAll();
 
     <?php echo $userHeader->printUserFooter(); ?>
     <script>
+        // Pass login status to JavaScript
+        var isLoggedIn = <?php echo isset($_SESSION['session_tourism_user']) ? 'true' : 'false'; ?>;
+    </script>
+    <script>
         document.querySelectorAll(".add-to-cart-btn").forEach(button => {
             button.addEventListener("click", function(e) {
                 e.preventDefault();
 
+                // Check if user is logged in
+                if (!isLoggedIn) {
+                    // Show login popup
+                    showLoginPopup();
+                    return;
+                }
+
                 const form = this.closest("form");
                 const productCard = this.closest(".treasure-card");
-                const productImage = productCard.querySelector(".cart-product-image");
+                const productImage = productCard ? productCard.querySelector(".cart-product-image") : null;
                 const cartIcon = document.querySelector("#cart-icon");
 
-                const imgClone = productImage.cloneNode(true);
+                if (!productImage) {
+                    if (form) form.submit();
+                    return;
+                }
 
+                const imgClone = productImage.cloneNode(true);
                 const rect = productImage.getBoundingClientRect();
-                const cartRect = cartIcon.getBoundingClientRect();
+                const cartRect = cartIcon ? cartIcon.getBoundingClientRect() : null;
 
                 imgClone.style.position = "fixed";
                 imgClone.style.left = rect.left + "px";
@@ -172,10 +187,12 @@ $products = $stmt->fetchAll();
                 document.body.appendChild(imgClone);
 
                 setTimeout(() => {
-                    imgClone.style.left = cartRect.left + "px";
-                    imgClone.style.top = cartRect.top + "px";
-                    imgClone.style.width = "20px";
-                    imgClone.style.opacity = "0.3";
+                    if (cartRect) {
+                        imgClone.style.left = cartRect.left + "px";
+                        imgClone.style.top = cartRect.top + "px";
+                        imgClone.style.width = "20px";
+                        imgClone.style.opacity = "0.3";
+                    }
                 }, 10);
 
                 setTimeout(() => {
@@ -185,6 +202,10 @@ $products = $stmt->fetchAll();
                     if (form) {
                         fetch("add_to_cart.php", {
                             method: "POST",
+                            credentials: "same-origin",
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
                             body: new FormData(form)
                         });
                     }

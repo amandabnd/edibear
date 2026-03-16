@@ -189,6 +189,9 @@ if ($totalReviews > 0) {
     <?php echo $userHeader->printUserFooter(); ?>
 
     <script>
+        // Pass login status to JavaScript
+        var isLoggedIn = <?php echo isset($_SESSION['session_tourism_user']) ? 'true' : 'false'; ?>;
+        
         // Quantity button functions
         document.getElementById("decreaseBtn").addEventListener("click", function() {
             var qty = document.getElementById("quantity");
@@ -211,6 +214,13 @@ if ($totalReviews > 0) {
             button.addEventListener("click", function(e) {
                 e.preventDefault();
 
+                // Check if user is logged in
+                if (!isLoggedIn) {
+                    // Show login popup
+                    showLoginPopup();
+                    return;
+                }
+
                 const form = this.closest("form");
                 const productImage = document.querySelector(".main-product-image");
                 const cartIcon = document.querySelector("#cart-icon") || document.querySelector(".fa-shopping-cart");
@@ -223,15 +233,14 @@ if ($totalReviews > 0) {
                     return;
                 }
 
-                if (!productImage || !cartIcon) {
+                if (!productImage) {
                     if (form) form.submit();
                     return;
                 }
 
                 const imgClone = productImage.cloneNode(true);
-
                 const rect = productImage.getBoundingClientRect();
-                const cartRect = cartIcon.getBoundingClientRect();
+                const cartRect = cartIcon ? cartIcon.getBoundingClientRect() : null;
 
                 imgClone.style.position = "fixed";
                 imgClone.style.left = rect.left + "px";
@@ -243,10 +252,12 @@ if ($totalReviews > 0) {
                 document.body.appendChild(imgClone);
 
                 setTimeout(() => {
-                    imgClone.style.left = cartRect.left + "px";
-                    imgClone.style.top = cartRect.top + "px";
-                    imgClone.style.width = "20px";
-                    imgClone.style.opacity = "0.3";
+                    if (cartRect) {
+                        imgClone.style.left = cartRect.left + "px";
+                        imgClone.style.top = cartRect.top + "px";
+                        imgClone.style.width = "20px";
+                        imgClone.style.opacity = "0.3";
+                    }
                 }, 10);
 
                 setTimeout(() => {
@@ -256,6 +267,10 @@ if ($totalReviews > 0) {
                     if (form) {
                         fetch("add_to_cart.php", {
                             method: "POST",
+                            credentials: "same-origin",
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
                             body: new FormData(form)
                         });
                     }

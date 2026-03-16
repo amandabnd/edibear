@@ -6,6 +6,13 @@ require_once("./classes/class.header.php");
 $user = new USER();
 $userHeader = new HEADER("cart");
 
+// Check if user is logged in
+if (!isset($_SESSION['session_tourism_user']) || empty($_SESSION['session_tourism_user'])) {
+    header("Location: ./login");
+    exit;
+}
+
+$user_id = (int) $_SESSION['session_tourism_user'];
 $session_id = session_id();
 
 // Handle delete item request
@@ -15,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product_id']))
         $user->deleteTableRow(
             "cart",
             array(
-                "session_id" => $session_id,
+                "user_id" => $user_id,
                 "product_id" => $deleteProductId
             )
         );
@@ -27,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_product_id']))
 $cartItems = $user->fetchAll(
     array("product_id","quantity"),
     array("cart"),
-    array("session_id"=>$session_id)
+    array("user_id" => $user_id)
 );
 ?>
 

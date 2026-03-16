@@ -1,3 +1,8 @@
+<!-- Now I want like this,
+There is a loging system right? If user not logged in, he or she can't add items to cart only can view the shop. If collect button clicked or go to cart page, a popup in center need to show 
+"Please logging to continue.."text with loging page button. 
+And also now in collect button should work with userid also. So when, user logged in and added items to cart, Need to only show particular user cart items and then the procced to checkout workflow. 
+And also add a loggout button in account page. -->
 <?php
     session_start();
     require_once("./classes/class.user.php");
@@ -590,6 +595,10 @@ to sharpen your knowledge and brighten your brave hearts!
     <?php echo $userHeader->printUserFooter(); ?>
     <!-- Footer End -->
     <script>
+        // Pass login status to JavaScript
+        var isLoggedIn = <?php echo isset($_SESSION['session_tourism_user']) ? 'true' : 'false'; ?>;
+    </script>
+    <script>
         function goToAyubowan() {
             $('html, body').animate({
                 scrollTop: $("#ayubowan").offset().top
@@ -601,15 +610,27 @@ to sharpen your knowledge and brighten your brave hearts!
             button.addEventListener("click", function(e) {
                 e.preventDefault();
 
+                // Check if user is logged in
+                if (!isLoggedIn) {
+                    // Show login popup
+                    showLoginPopup();
+                    return;
+                }
+
                 const form = this.closest("form");
                 const productCard = this.closest(".product-card");
-                const productImage = productCard.querySelector(".cart-product-image");
+                const productImage = productCard ? productCard.querySelector(".cart-product-image") : null;
                 const cartIcon = document.querySelector("#cart-icon");
 
-                const imgClone = productImage.cloneNode(true);
+                // If the product image is missing, fallback to normal submit (no animation)
+                if (!productImage) {
+                    if (form) form.submit();
+                    return;
+                }
 
+                const imgClone = productImage.cloneNode(true);
                 const rect = productImage.getBoundingClientRect();
-                const cartRect = cartIcon.getBoundingClientRect();
+                const cartRect = cartIcon ? cartIcon.getBoundingClientRect() : null;
 
                 imgClone.style.position = "fixed";
                 imgClone.style.left = rect.left + "px";
@@ -621,10 +642,12 @@ to sharpen your knowledge and brighten your brave hearts!
                 document.body.appendChild(imgClone);
 
                 setTimeout(() => {
-                    imgClone.style.left = cartRect.left + "px";
-                    imgClone.style.top = cartRect.top + "px";
-                    imgClone.style.width = "20px";
-                    imgClone.style.opacity = "0.3";
+                    if (cartRect) {
+                        imgClone.style.left = cartRect.left + "px";
+                        imgClone.style.top = cartRect.top + "px";
+                        imgClone.style.width = "20px";
+                        imgClone.style.opacity = "0.3";
+                    }
                 }, 10);
 
                 setTimeout(() => {
@@ -634,6 +657,10 @@ to sharpen your knowledge and brighten your brave hearts!
                     if (form) {
                         fetch("add_to_cart.php", {
                             method: "POST",
+                            credentials: "same-origin",
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            },
                             body: new FormData(form)
                         });
                     }
